@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: elastickube-mongo
+  namespace: kube-system
+  labels:
+    name: elastickube-mongo
+spec:
+  replicas: 1
+  selector:
+    name: elastickube-mongo
+  template:
+    metadata:
+      labels:
+        name: elastickube-mongo
+    spec:
+      containers:
+        - image: mongo
+          name: elastickube-mongo
+          args:
+          - --replSet=elastickube
+          ports:
+          - name: mongo
+            containerPort: 27017
+            hostPort: 27017
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/mongodb
+      volumes:
+      - name: mongo-persistent-storage
+        hostPath:
+          path: /data/mongodb
