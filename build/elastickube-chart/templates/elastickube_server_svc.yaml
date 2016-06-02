@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastickube-server
+  namespace: kube-system
+  labels:
+    name: elastickube-server
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    name: elastickube-server
