@@ -26,6 +26,9 @@ class InstanceStateSelectorController {
                 { display: 'Pending', state: 'Pending' },
                 { display: 'Failed', state: 'Failed' }]
             },
+            { display: 'Deployments', kind: 'Deployment' },
+            { display: 'ReplicaSets', kind: 'ReplicaSet' },
+            { display: 'DaemonSets', kind: 'DaemonSet' },
             { display: 'ReplicationControllers', kind: 'ReplicationController' },
             { display: 'Services', kind: 'Service' }];
         this.selectedState = { state: _.first(this.states) };

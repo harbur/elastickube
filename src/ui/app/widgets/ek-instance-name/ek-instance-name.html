@@ -1,6 +1,6 @@
 <div flex layout="row" layout-align="start center">
     <div class="mr10">
-        <ek-ikon swap-border-fill-color="instance.kind==='ReplicationController'" name="instance.metadata.name"></ek-ikon>
+        <ek-ikon swap-border-fill-color="instance.kind==='ReplicationController' || instance.kind==='ReplicaSet' || instance.kind==='DaemonSet'" name="instance.metadata.name"></ek-ikon>
     </div>
     <div>
         <a class="mt0 mb0" ui-sref="instance.overview({ namespace: instance.metadata.namespace, instanceId: instance.metadata.uid })">{{

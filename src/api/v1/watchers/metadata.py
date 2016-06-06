@@ -79,6 +79,30 @@ class WatcherMetadata(object):
                                 "namespace": "%(namespace)s"
                             }
                         },
+                        "replicasets": {
+                            "resource": "replicasets",
+                            "type": "ReplicaSetList",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s"
+                            }
+                        },
+                        "daemonsets": {
+                            "resource": "daemonsets",
+                            "type": "DaemonSetList",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s"
+                            }
+                        },
+                        "deployments": {
+                            "resource": "deployments",
+                            "type": "DeploymentList",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s"
+                            }
+                        },
                         "services": {
                             "resource": "services",
                             "type": "ServiceList",
@@ -107,6 +131,33 @@ class WatcherMetadata(object):
                             "parameters": {
                                 "namespace": "%(namespace)s",
                                 "resourceVersion": "%(resourceVersionReplicationControllerList)s"
+                            }
+                        },
+                        "replicasets": {
+                            "resource": "replicasets",
+                            "type": "ReplicaSetList",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "resourceVersion": "%(resourceVersionReplicaSetList)s"
+                            }
+                        },
+                        "daemonsets": {
+                            "resource": "daemonsets",
+                            "type": "DaemonSetList",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "resourceVersion": "%(resourceVersionDaemonSetList)s"
+                            }
+                        },
+                        "deployments": {
+                            "resource": "deployments",
+                            "type": "DeploymentList",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "resourceVersion": "%(resourceVersionDeploymentList)s"
                             }
                         },
                         "services": {
@@ -221,6 +272,174 @@ class WatcherMetadata(object):
                                 "namespace": "%(namespace)s",
                                 "name": "%(name)s",
                                 "resourceVersion": "%(resourceVersionReplicationController)s"
+                            }
+                        },
+                        "events": {
+                            "resource": "events",
+                            "type": "EventList",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "resourceVersion": "%(resourceVersionEventList)s",
+                                "fieldSelector": ("involvedObject.name=%(name)s,"
+                                                  "involvedObject.kind=%(kind)s,"
+                                                  "involvedObject.namespace=%(namespace)s,"
+                                                  "involvedObject.uid=%(uid)s")
+                            }
+                        }
+                    }
+                }
+            },
+            "replicaset": {
+                "params": ["namespace", "kind", "name"],
+                "required_params": ["namespace", "kind", "name"],
+                "init": {
+                    "resources": {
+                        "replicasets": {
+                            "resource": "replicasets",
+                            "type": "ReplicaSet",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "name": "%(name)s"
+                            }
+                        },
+                        "events": {
+                            "resource": "events",
+                            "type": "EventList",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "fieldSelector": ("involvedObject.name=%(name)s,"
+                                                  "involvedObject.kind=%(kind)s,"
+                                                  "involvedObject.namespace=%(namespace)s,"
+                                                  "involvedObject.uid=%(uid)s")
+                            }
+                        }
+                    }
+                },
+                "watch": {
+                    "resources": {
+                        "replicasets": {
+                            "resource": "replicasets",
+                            "type": "ReplicaSet",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "name": "%(name)s",
+                                "resourceVersion": "%(resourceVersionReplicaSet)s"
+                            }
+                        },
+                        "events": {
+                            "resource": "events",
+                            "type": "EventList",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "resourceVersion": "%(resourceVersionEventList)s",
+                                "fieldSelector": ("involvedObject.name=%(name)s,"
+                                                  "involvedObject.kind=%(kind)s,"
+                                                  "involvedObject.namespace=%(namespace)s,"
+                                                  "involvedObject.uid=%(uid)s")
+                            }
+                        }
+                    }
+                }
+            },
+            "daemonset": {
+                "params": ["namespace", "kind", "name"],
+                "required_params": ["namespace", "kind", "name"],
+                "init": {
+                    "resources": {
+                        "daemonsets": {
+                            "resource": "daemonsets",
+                            "type": "ReplicaSet",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "name": "%(name)s"
+                            }
+                        },
+                        "events": {
+                            "resource": "events",
+                            "type": "EventList",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "fieldSelector": ("involvedObject.name=%(name)s,"
+                                                  "involvedObject.kind=%(kind)s,"
+                                                  "involvedObject.namespace=%(namespace)s,"
+                                                  "involvedObject.uid=%(uid)s")
+                            }
+                        }
+                    }
+                },
+                "watch": {
+                    "resources": {
+                        "daemonsets": {
+                            "resource": "daemonsets",
+                            "type": "ReplicaSet",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "name": "%(name)s",
+                                "resourceVersion": "%(resourceVersionDaemonSet)s"
+                            }
+                        },
+                        "events": {
+                            "resource": "events",
+                            "type": "EventList",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "resourceVersion": "%(resourceVersionEventList)s",
+                                "fieldSelector": ("involvedObject.name=%(name)s,"
+                                                  "involvedObject.kind=%(kind)s,"
+                                                  "involvedObject.namespace=%(namespace)s,"
+                                                  "involvedObject.uid=%(uid)s")
+                            }
+                        }
+                    }
+                }
+            },
+            "deployment": {
+                "params": ["namespace", "kind", "name"],
+                "required_params": ["namespace", "kind", "name"],
+                "init": {
+                    "resources": {
+                        "deployments": {
+                            "resource": "deployments",
+                            "type": "Deployment",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "name": "%(name)s"
+                            }
+                        },
+                        "events": {
+                            "resource": "events",
+                            "type": "EventList",
+                            "method": "GET",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "fieldSelector": ("involvedObject.name=%(name)s,"
+                                                  "involvedObject.kind=%(kind)s,"
+                                                  "involvedObject.namespace=%(namespace)s,"
+                                                  "involvedObject.uid=%(uid)s")
+                            }
+                        }
+                    }
+                },
+                "watch": {
+                    "resources": {
+                        "deployments": {
+                            "resource": "deployments",
+                            "type": "Deployment",
+                            "method": "WATCH",
+                            "parameters": {
+                                "namespace": "%(namespace)s",
+                                "name": "%(name)s",
+                                "resourceVersion": "%(resourceVersionDeployment)s"
                             }
                         },
                         "events": {

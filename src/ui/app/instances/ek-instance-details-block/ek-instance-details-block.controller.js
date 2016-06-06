@@ -40,6 +40,18 @@ class InstanceDetailsBlockController {
                 this.details = this._createReplicationControllerDetails();
                 break;
 
+            case 'ReplicaSet':
+                this.details = this._createReplicaSetDetails();
+                break;
+
+            case 'DaemonSet':
+                this.details = this._createDaemonSetDetails();
+                break;
+
+            case 'Deployment':
+                this.details = this._createDeploymentDetails();
+                break;
+
             default:
                 this.details = this._createPodDetails();
         }
@@ -69,6 +81,39 @@ class InstanceDetailsBlockController {
     }
 
     _createReplicationControllerDetails() {
+        const details = {};
+
+        details.Kind = this.instance.kind;
+        details['Volume(s)'] = _.chain(this.instance.spec.template.spec.volumes).map((x) => x.name).join(', ').value();
+        details['Start Time'] = moment.utc(this.instance.metadata.creationTimestamp).local().format('ddd, D MMM GGGG HH:mm:ss');
+        details.Replicas = `${this.instance.status.replicas}/${this.instance.spec.replicas} replicas created`;
+
+        return _.omitBy(details, _.isEmpty);
+    }
+
+    _createReplicaSetDetails() {
+        const details = {};
+
+        details.Kind = this.instance.kind;
+        details['Volume(s)'] = _.chain(this.instance.spec.template.spec.volumes).map((x) => x.name).join(', ').value();
+        details['Start Time'] = moment.utc(this.instance.metadata.creationTimestamp).local().format('ddd, D MMM GGGG HH:mm:ss');
+        details.Replicas = `${this.instance.status.replicas}/${this.instance.spec.replicas} replicas created`;
+
+        return _.omitBy(details, _.isEmpty);
+    }
+
+    _createDaemonSetDetails() {
+        const details = {};
+
+        details.Kind = this.instance.kind;
+        details['Volume(s)'] = _.chain(this.instance.spec.template.spec.volumes).map((x) => x.name).join(', ').value();
+        details['Start Time'] = moment.utc(this.instance.metadata.creationTimestamp).local().format('ddd, D MMM GGGG HH:mm:ss');
+        details.Replicas = `${this.instance.status.currentNumberScheduled}/${this.instance.status.desiredNumberScheduled} created`;
+
+        return _.omitBy(details, _.isEmpty);
+    }
+
+    _createDeploymentDetails() {
         const details = {};
 
         details.Kind = this.instance.kind;
