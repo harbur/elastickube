@@ -18,12 +18,14 @@ import binascii
 import glob
 import logging
 import os
+import io
+import ntpath
 
 from git.repo import Repo
 from git.exc import InvalidGitRepositoryError
 from tornado.gen import coroutine, Return, sleep
 from yaml import load, load_all
-
+from subprocess import check_output
 
 from data import DEFAULT_GITREPO
 from data.query import Query
@@ -157,6 +159,16 @@ class GitSync(object):
         manifests_path = os.path.join(directory, "manifests", "*.yaml")
         for manifest in glob.glob(manifests_path):
             with open(manifest, "r") as stream:
+                manifests[manifest] = dict(
+                    resources=[resource for resource in load_all(stream)],
+                    commit=self.repo.iter_commits(paths=manifest).next()
+                )
+
+        manifests_path = os.path.join(directory, "templates", "*.yaml")
+        for manifest in glob.glob(manifests_path):
+            manifest_filename = ntpath.basename(manifest)
+            rendered_manifest = check_output(["tide", "view", "-f", "templates/" + manifest_filename, directory])
+            with io.TextIOWrapper(io.BytesIO(rendered_manifest)) as stream:
                 manifests[manifest] = dict(
                     resources=[resource for resource in load_all(stream)],
                     commit=self.repo.iter_commits(paths=manifest).next()

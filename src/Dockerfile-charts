@@ -10,4 +10,7 @@ ADD charts ${ELASTICKUBE_PATH}/charts
 
 RUN pip install --no-compile tornado motor GitPython pyyaml
 
+RUN curl -sL https://github.com/harbur/tide/releases/download/v0.3.0/tide_linux_amd64 > /usr/local/bin/tide && \
+    chmod +x /usr/local/bin/tide
+
 CMD ${ELASTICKUBE_PATH}/charts/entrypoint.sh
