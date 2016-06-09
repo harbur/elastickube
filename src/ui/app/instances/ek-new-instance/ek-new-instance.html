@@ -14,8 +14,9 @@
                     <ek-choose-chart step="ctrl.step" on-selection="ctrl.chartSelected()"></ek-choose-chart>
                     <ek-customize-deployment step="ctrl.step"></ek-customize-deployment>
                 </div>
-                <div class="ek-new-instance__deploy" layout="row" layout-align="center center">
+                <div class="ek-new-instance__deploy" layout="column" layout-align="center center">
                     <md-button class="md-raised md-primary ek-button" ng-disabled="ctrl.isDisabled()" ng-click="ctrl.deploy()">Deploy</md-button>
+                    <md-button class="md-raised md-warning ek-button" ng-disabled="ctrl.isDisabled()" ng-click="ctrl.destroy()">Destroy</md-button>
                 </div>
             </div>
         </div>
