@@ -24,6 +24,7 @@ class InstanceStateSelectorController {
                 display: 'Pods', kind: 'Pod', filters: [
                 { display: 'Running', state: 'Running' },
                 { display: 'Pending', state: 'Pending' },
+                { display: 'Terminating', state: 'Terminating' },
                 { display: 'Failed', state: 'Failed' }]
             },
             { display: 'Deployments', kind: 'Deployment' },

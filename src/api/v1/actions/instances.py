@@ -68,17 +68,40 @@ class InstancesActions(object):
     def delete(self, document):
         logging.debug("Deleting instance for request %s", document)
 
-        if document["kind"] == "ReplicationController":
-            response = yield self.kube[self.kube.get_resource_type(document["kind"])].patch(
-                document["name"], dict(spec=dict(replicas=0)), namespace=document["namespace"])
-            logging.debug("Updated ReplicationController %s", response)
+        # Delete all manifests inside Chart
+        if document["kind"] == "Chart":
+            logging.debug("Deleting Chart entries %s", document["uid"])
+            namespace = document["namespace"]
 
-        if document["kind"] == "ReplicaSet":
-            response = yield self.kube[self.kube.get_resource_type(document["kind"])].patch(
-                document["name"], dict(spec=dict(replicas=0)), namespace=document["namespace"])
-            logging.debug("Updated ReplicaSet %s", response)
+            chart = yield Query(self.database, "Charts", manipulate=True).find_one({"_id": ObjectId(document["uid"])})
 
-        response = yield self.kube[self.kube.get_resource_type(document["kind"])].delete(
-            document["name"], namespace=document["namespace"])
+            if chart is None:
+                raise ObjectNotFoundError("Cannot find Chart %s" % document["uid"])
 
+            response = []
+            for manifest in chart["resources"]:
+                logging.debug("Deleting Chart manifest %s", manifest["metadata"]["name"])
+                kind = manifest["kind"]
+                name = manifest["metadata"]["name"]
+
+                if kind == "ReplicationController" or kind == "ReplicaSet" or kind == "Deployment":
+                    response = yield self.kube[self.kube.get_resource_type(kind)].patch(
+                        name, dict(spec=dict(replicas=0)), namespace=namespace)
+                    logging.debug("Updated %s %s", kind, response)
+
+                response = yield self.kube[self.kube.get_resource_type(kind)].delete(
+                    name, namespace=namespace)
+        else:
+            logging.debug("Deleting manifest item %s", document["name"])
+            kind = document["kind"]
+            name = document["name"]
+            namespace = document["namespace"]
+
+            if kind == "ReplicationController" or kind == "ReplicaSet" or kind == "Deployment":
+                response = yield self.kube[self.kube.get_resource_type(kind)].patch(
+                    name, dict(spec=dict(replicas=0)), namespace=namespace)
+                logging.debug("Updated %s %s", kind, response)
+
+            response = yield self.kube[self.kube.get_resource_type(kind)].delete(
+                name, namespace=namespace)
         raise Return(response)

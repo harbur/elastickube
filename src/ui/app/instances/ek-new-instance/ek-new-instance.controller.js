@@ -51,6 +51,12 @@ class NewInstanceController {
             .catch((error) => this._$log.error(error.body))
             .finally(() => this.goToInstances());
     }
+    destroy() {
+        return this._instancesActionCreator
+            .destroy(this._sessionStore.getActiveNamespace(), this.selectedChart, this.deploymentInfo)
+            .catch((error) => this._$log.error(error.body))
+            .finally(() => this.goToInstances());
+    }
 }
 
 export default NewInstanceController;

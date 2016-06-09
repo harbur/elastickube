@@ -45,6 +45,16 @@ class InstancesActionCreatorService {
             .then((instances) => this._dispatcher.dispatch({ type: this._actions.INSTANCE_DEPLOYED, instances }));
     }
 
+    destroy(namespace, chart) {
+        const body = {
+            kind: 'Chart',
+            uid: chart._id.$oid,
+            namespace: _.get(namespace, 'metadata.name')
+        };
+
+        return this._instancesAPI.remove(body);
+    }
+
     delete(instance) {
         const body = {
             kind: instance.kind,
