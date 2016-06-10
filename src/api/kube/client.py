@@ -222,6 +222,7 @@ class KubeClient(object):
         "deployments": "Deployment",
         "resourcequotas": "ResourceQuota",
         "scale": "Scale",
+        "configmaps": "ConfigMap",
         "secrets": "Secret",
         "serviceaccounts": "ServiceAccount",
         "services": "Service"
