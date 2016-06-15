@@ -255,10 +255,9 @@ class KubeClient(object):
         if len(apis_groups) > 0 and len(apis_groups[0].get("versions", [])) > 0:
             for api_group in apis_groups:
                 group_version = api_group.get("versions", [])[0].get("groupVersion", [])
+                yield self._build_api_extensions(group_version)
         else:
             raise Return()
-
-        yield self._build_api_extensions(group_version)
 
     def get_resource_type(self, kind):
         if kind not in self.kind_to_resource.keys():
