@@ -217,8 +217,12 @@ class KubeClient(object):
         "pods": "Pod",
         "podtemplates": "PodTemplate",
         "replicationcontrollers": "ReplicationController",
+        "replicasets": "ReplicaSet",
+        "daemonsets": "DaemonSet",
+        "deployments": "Deployment",
         "resourcequotas": "ResourceQuota",
         "scale": "Scale",
+        "configmaps": "ConfigMap",
         "secrets": "Secret",
         "serviceaccounts": "ServiceAccount",
         "services": "Service"
@@ -249,11 +253,11 @@ class KubeClient(object):
         response = yield self.http_client.get("/apis")
         apis_groups = json.loads(response.body).get("groups", [])
         if len(apis_groups) > 0 and len(apis_groups[0].get("versions", [])) > 0:
-            group_version = apis_groups[0].get("versions", [])[0].get("groupVersion", [])
+            for api_group in apis_groups:
+                group_version = api_group.get("versions", [])[0].get("groupVersion", [])
+                yield self._build_api_extensions(group_version)
         else:
             raise Return()
-
-        yield self._build_api_extensions(group_version)
 
     def get_resource_type(self, kind):
         if kind not in self.kind_to_resource.keys():

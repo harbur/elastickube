@@ -30,7 +30,7 @@
 
             <ek-ikon class="ek-instance__ikon"
                      name="ctrl.instance.metadata.name"
-                     swap-border-fill-color="ctrl.instance.kind === 'ReplicationController'"></ek-ikon>
+                     swap-border-fill-color="ctrl.instance.kind === 'ReplicationController' || ctrl.instance.kind === 'ReplicaSet' || ctrl.instance.kind === 'DaemonSet'"></ek-ikon>
         </div>
 
         <div class="ek-instance__body__content"

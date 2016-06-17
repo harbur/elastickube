@@ -73,6 +73,11 @@ class InstancesActions(object):
                 document["name"], dict(spec=dict(replicas=0)), namespace=document["namespace"])
             logging.debug("Updated ReplicationController %s", response)
 
+        if document["kind"] == "ReplicaSet":
+            response = yield self.kube[self.kube.get_resource_type(document["kind"])].patch(
+                document["name"], dict(spec=dict(replicas=0)), namespace=document["namespace"])
+            logging.debug("Updated ReplicaSet %s", response)
+
         response = yield self.kube[self.kube.get_resource_type(document["kind"])].delete(
             document["name"], namespace=document["namespace"])
 
